@@ -1,47 +1,69 @@
 package com.company;
 
-import java.security.spec.MGF1ParameterSpec;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class MyGraph<Vertex>{
-    private final boolean undirected;
-    private Map<Vertex, List<Vertex>> map = new HashMap<>();
+class MyGraph<T> {
+    private boolean undirected;
+    private Map<T, List<T>> map = new HashMap<>();
 
     public MyGraph() {
+        map = new HashMap<T, List<T>>();
     }
 
     public MyGraph(boolean undirected){
-
+        this.undirected = undirected;
+        map = new HashMap<>();
     }
 
-    public void addVertex(Vertex vertex){
+    public void addVertex(T vertex){
         map.put(vertex, new LinkedList<>());
     }
 
-    public void addEdge(Vertex source, Vertex dest){
+    public void addEdge(T source, T dest){
+        if (!map.containsKey(source)) addVertex(source);
 
+        if (!map.containsKey(dest)) addVertex(dest);
+
+        if (undirected) map.get(dest).add(source);
     }
 
     public int getVerticesCount(){
-        return map.size();
+        return map.keySet().size();
     }
 
     public int getEdgesCount(){
-
+        int c=0;
+        for(T vertex : map.keySet()){
+            c += map.get(vertex).size();
+        }
+        return c;
+    }
+    public boolean hasVertex(T vertex){
+        if (map.containsKey(vertex)) return true;
+        else return false;
     }
 
-    public boolean hasVertex(Vertex vertex){
-
+    public boolean hasEdge(T source, T dest){
+        if(map.get(source).contains(dest)) return true;
+        else return false;
     }
 
-    public boolean hasEdge(Vertex source, Vertex dest){
+    /*public Iterable<Vertex> adj(){
 
+    }*/
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        for (T v : map.keySet()){
+            builder.append(v.toString() + ": ");
+            for (T w : map.get(v)){
+                builder.append(w.toString() + " ");
+            }
+            builder.append("\n");
+        }
+        return (builder.toString());
     }
 
-    public Iterable<Vertex> adj(){
-        
-    }
 }
