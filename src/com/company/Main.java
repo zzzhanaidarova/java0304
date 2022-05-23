@@ -1,24 +1,22 @@
 package com.company;
 
+import sun.security.provider.certpath.Vertex;
+
 public class Main {
 
     public static void main(String[] args) {
-        MyGraph<Integer> graph = new MyGraph<>(true);
+        MyGraph<String> graph = new MyGraph<>(true);
 
-        graph.addVertex(0);
-        graph.addEdge(10, 0);
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
+        graph.addEdge("Almaty", "Astana");
+        graph.addEdge("Almaty", "Shymkent");
+        graph.addEdge("Shymkent", "Astana");
+        graph.addEdge("Astana", "Kostanay");
+        graph.addEdge("Shymkent", "Kyzylorda");
+    }
 
-        for (int i = 1; i < 6; i++) {
-            graph.addEdge(i + 1, i);
+    public static void outputPath(Search<Vertex> search, Vertex key){
+        for (Vertex vertex : search.pathTo(key)){
+            System.out.println(vertex + " -> ");
         }
-
-        System.out.println("Graph:\n" + graph.toString());
-        System.out.println("--------");
-
-        System.out.println("Edges count = " + graph.getEdgesCount());
-        System.out.println("Vertices count = " + graph.getVerticesCount());
     }
 }

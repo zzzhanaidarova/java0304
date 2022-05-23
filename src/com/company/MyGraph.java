@@ -5,27 +5,35 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-class MyGraph<T> {
+class MyGraph<Vertex> {
     private boolean undirected;
-    private Map<T, List<T>> map = new HashMap<>();
+    private Map<Vertex, List<Vertex>> map = new HashMap<>();
+    private Map<Vertex, List<Vertex>> adj = new HashMap<>();
 
     public MyGraph() {
-        map = new HashMap<T, List<T>>();
+        map = new HashMap<Vertex, List<Vertex>>();
+        adj = new HashMap<Vertex, List<Vertex>>();
     }
 
     public MyGraph(boolean undirected){
         this.undirected = undirected;
         map = new HashMap<>();
+        adj = new HashMap<>();
     }
 
-    public void addVertex(T vertex){
+    public void addVertex(Vertex vertex){
         map.put(vertex, new LinkedList<>());
+        adj.put(vertex, new LinkedList<>());
     }
 
-    public void addEdge(T source, T dest){
-        if (!map.containsKey(source)) addVertex(source);
+    public void addEdge(Vertex source, Vertex dest){
+        if (!hasVertex(source)) addVertex(source);
 
-        if (!map.containsKey(dest)) addVertex(dest);
+        if (!hasVertex(dest)) addVertex(dest);
+
+        if (hasEdge(source, dest) || source.equals(dest)) return;
+
+        map.get(source).add(dest);
 
         if (undirected) map.get(dest).add(source);
     }
@@ -36,34 +44,24 @@ class MyGraph<T> {
 
     public int getEdgesCount(){
         int c=0;
-        for(T vertex : map.keySet()){
+        for(Vertex vertex : map.keySet()){
             c += map.get(vertex).size();
         }
         return c;
     }
-    public boolean hasVertex(T vertex){
+    public boolean hasVertex(Vertex vertex){
         if (map.containsKey(vertex)) return true;
         else return false;
     }
 
-    public boolean hasEdge(T source, T dest){
+    public boolean hasEdge(Vertex source, Vertex dest){
         if(map.get(source).contains(dest)) return true;
         else return false;
     }
 
-    /*public Iterable<Vertex> adj(){
-
-    }*/
-    public String toString(){
-        StringBuilder builder = new StringBuilder();
-        for (T v : map.keySet()){
-            builder.append(v.toString() + ": ");
-            for (T w : map.get(v)){
-                builder.append(w.toString() + " ");
-            }
-            builder.append("\n");
-        }
-        return (builder.toString());
+    public Iterable<Vertex> adj(Vertex vertex) {
+        if (!adj.containsKey(vertex)) return null;
+        return adj.get(vertex);
     }
 
 }
